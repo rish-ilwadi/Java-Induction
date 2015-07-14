@@ -15,6 +15,7 @@ import java.io.*;
 public class Books implements Runnable{
 
 	private String bookName;
+     private FileWriter file;
 	/*
 	 * Method: protected synchronized String getBookName()
 	 * returns String
@@ -91,10 +92,10 @@ public class Books implements Runnable{
 	 */
 	public void run() {
 		try{
-			FileWriter file=new FileWriter("BookName.txt",true);
+		     file=new FileWriter("BookName.txt",true);
 			file.write("\n\n");
 			file.write("\n\nBookName : "+this.getBookName()+"  " );
-			file.close();
+			
 		}catch(FileNotFoundException exception){
 			
 			System.out.println(exception.getMessage()+" Create a new file");
@@ -103,6 +104,11 @@ public class Books implements Runnable{
 			
 			System.out.println(ioException.getMessage());
 		}
+           finally{
+                file.flush();
+                file.close();
+                   
+           }
 		
 	}
 
