@@ -38,13 +38,9 @@ public class Resource {
 	 */
 	protected synchronized int getResourceId(){
 		
-		String resourceName;
-		resourceName=this.getResourceName();
-		if(resourceName.equals(this.resourceName)){
-			
-			return this.resourceId;
-		}
-		return 0;
+		Thread.sleep(5000);
+	    return this.resourceId;
+		
 	}
 	/*
 	 * method: public void setResourceName(String resourceName)
