@@ -1,5 +1,11 @@
 package Collect;
-
+/*
+ * Package Collect
+ * public class Employee
+ * 
+ * Used for Adding details ID & Name of an Employee
+ * And Displaying them in Sorted Order
+ */
 import java.util.*;
 import java.io.*;
 
@@ -17,10 +23,12 @@ public class Employee {
 			totalEmployees=Integer.parseInt(reader.readLine());
 			System.out.println("\n");
 		    AddEmployee employee;
-			Map <Integer,String> map=new <Integer,String> HashMap();
+			Map <Integer,String> map=new <Integer,String> LinkedHashMap();
 			//Provide Details of Employee
+			//can throw EmployeeException
 			for(int counter = 1 ; counter <= totalEmployees; counter++){
 			
+				try{
 					System.out.println("Employee "+counter+"\n\n");
 					System.out.println("Enter Employee Name");
 					name=reader.readLine();
@@ -30,7 +38,11 @@ public class Employee {
 					employee.setName(name);
 					employee.setId(id);
 					map.put(employee.getId(),employee.getName()); //Id & Name added in map as (Key,Value) pair 
-					
+				
+				}catch(EmployeeException exception){
+					System.out.println(exception.getMessage());
+					counter--;
+				}
 
 
 			}	
@@ -41,6 +53,11 @@ public class Employee {
 			
 			
 	}
+	/*
+	 * method: public void show(Map <Integer,String>map)
+	 * takes map as a input & displays the output in Sorted Order of Id(Key) 
+	 * 
+	 */
 	public void show(Map <Integer,String>map){
 		
 		Map <Integer,String>sortedMap=new <Integer,String>TreeMap();

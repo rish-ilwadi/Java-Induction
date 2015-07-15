@@ -39,9 +39,14 @@ public class AddEmployee {
 	/*
 	 * Setter method: public void setId(int id)
 	 * used for setting the employee's id
+	 * throws EmployeeException
 	 */
-	public void setId(int id){
+	public void setId(int id)throws EmployeeException{
+		if(id <= 0 ||id > 65535){
+			throw new EmployeeException("Invalid ID");
+		}
 		this.id=id;
+		
 	}
 	
 } 
