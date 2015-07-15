@@ -73,26 +73,31 @@ public class ShowEmployee {
 	     /*
 	      * Checking & printing for employees whose Department is not Sales
 	      */
-	     while(iterator.hasNext() || keyIterator.hasNext()){
+	     try{
+	    	 while(iterator.hasNext() || keyIterator.hasNext()){
 	    	 
-	    	 employee=(AddEmployee)iterator.next();
-	    	 id=(int)keyIterator.next();
-	    	 name=(String)map.get(id);
+	    		 employee=(AddEmployee)iterator.next();
+	    		 id=(int)keyIterator.next();
+	    		 name=(String)map.get(id);
 	    	 
-	    	 if(employee.getId()==id && employee.getName().equals(name)){
+	    		 if(employee.getId()==id && employee.getName().equals(name)){
 	    		 
 	    		 
-	    		 if(employee.getDepartment().equals((String)Department.Sales.name())){
+	    			 if(employee.getDepartment().equals((String)Department.Sales.name())){
 	    		 
-	    		       continue;
-	    		 }
-	    		 else{
-	    			 System.out.println(id+"\t"+name);
-	    			 counter++;
+	    				 continue;
+	    			 }
+	    			 else{
+	    				 System.out.println(id+"\t"+name);
+	    				 counter++;
+	    			 }
 	    		 }
 	    	 }
-	    }
-	
-		System.out.println("\nNo. of Employees= "+counter);
+	      }catch(Exception exception){
+	    	  System.out.println(exception.getMessage());
+	      }
+	     finally{
+	    	 System.out.println("\nNo. of Employees= "+counter);
+	     }
 	}
 }
