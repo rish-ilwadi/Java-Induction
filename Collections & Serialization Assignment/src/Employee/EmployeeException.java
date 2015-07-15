@@ -1,7 +1,7 @@
 package Employee;
 
 /*
- * package EmployeeMgmt
+ * package Employee
  * import java.lang package
  * public class EmployeeException 
  * extends java.io.Exception
