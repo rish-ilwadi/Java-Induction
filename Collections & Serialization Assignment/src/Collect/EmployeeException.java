@@ -1,7 +1,7 @@
 package Collect;
 
 /*
- * package EmployeeMgmt
+ * package Collect
  * import java.lang package
  * public class EmployeeException 
  * extends java.io.Exception
@@ -11,7 +11,7 @@ public class EmployeeException extends Exception {
 
 
 	/**
-	 * EmployeeException class used for generating Excetions which occur during calculation of 
+	 * EmployeeException class used for generating Exceptions which occur during calculation of 
 	 * Employee's Salary or during cLeaves Count
 	 */
 	private static final long serialVersionUID = 787172381237074711L;
