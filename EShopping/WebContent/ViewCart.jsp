@@ -34,7 +34,7 @@
 	
 %>
 
-<a href="Home.jsp">Add More Products</a>&nbsp;&nbsp;<a href="Checkout">Proceed to CheckOut</a>
+<a href="Home.jsp">Add More Products</a>&nbsp;&nbsp;<a href="Checkout.jsp">Proceed to CheckOut</a>&nbsp;&nbsp;<a href="CancelShopping">Cancel Shopping</a>
 
 </body>
 </html>

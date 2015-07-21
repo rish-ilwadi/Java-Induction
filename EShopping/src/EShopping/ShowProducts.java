@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 
 /**
  * Servlet implementation class ShowProducts
+ * Contains methods used for displaying the products in each category
  */
 @WebServlet("/ShowProducts")
 public class ShowProducts extends HttpServlet {
@@ -54,40 +55,75 @@ public class ShowProducts extends HttpServlet {
 	      response.sendRedirect("ShowProducts.jsp?category="+categoryId);
 		
 	}
-	public ResultSet showProducts(long categoryId,HttpSession session)throws ClassNotFoundException, SQLException{
+	/*
+	 * method: public ResultSet showProducts(long categoryId,HttpSession session)
+	 * 
+	 * Used for displaying the products in each category. Takes category Id & session as input
+	 */
+			
+	public ResultSet showProducts(long categoryId,HttpSession session){
 		
 		Connection connect;
 		LogIn newLogIn;
 		newLogIn=(LogIn)session.getAttribute("LogIn");
-		connect=newLogIn.connectionString();
-		Statement statement=connect.createStatement();
-		ResultSet set=statement.executeQuery("SELECT product_id, product_name,category_name,price,quantity FROM Product_Details	INNER JOIN Product_Categories ON Product_Details.category_id="
+		try {
+			connect=newLogIn.connectionString();
+		
+			Statement statement=connect.createStatement();
+			ResultSet set=statement.executeQuery("SELECT product_id, product_name,category_name,price,quantity FROM Product_Details	INNER JOIN Product_Categories ON Product_Details.category_id="
 				+ "Product_Categories.category_id WHERE Product_Details.category_id="+categoryId);
-		return set;
-		
+			return set;
+		} catch (ClassNotFoundException | SQLException exception) {
+			
+			return null;
+		}
 
 	}
-	public ResultSet presentCategory(long categoryId,HttpSession session)throws ClassNotFoundException, SQLException{
+	/*
+	 * method: public ResultSet presentCategory(long categoryId,HttpSession session)
+	 * 
+	 * Used for getting the name of the present selected category
+	 */
+	public ResultSet presentCategory(long categoryId,HttpSession session){
 		
 		Connection connect;
 		LogIn newLogIn;
 		newLogIn=(LogIn)session.getAttribute("LogIn");
-		connect=newLogIn.connectionString();
-		Statement statement=connect.createStatement();
-		ResultSet set=statement.executeQuery("SELECT category_name FROM Product_Categories WHERE category_id="+categoryId);
-		return set;
+		try {
+			connect=newLogIn.connectionString();
+		
+			Statement statement=connect.createStatement();
+			ResultSet set=statement.executeQuery("SELECT category_name FROM Product_Categories WHERE category_id="+categoryId);
+			return set;
+		} catch (ClassNotFoundException | SQLException exception) {
+			
+			return null;
+		}
+		
 		
 
 	}
-	public ResultSet showOtherCategories(long categoryId,HttpSession session)throws ClassNotFoundException, SQLException{
+	/*
+	 * method: public ResultSet showOtherCategories(long categoryId,HttpSession session)
+	 * 
+	 * Used for getting the categories other than the selected category 
+	 * 
+	 */
+	public ResultSet showOtherCategories(long categoryId,HttpSession session){
 		
 		Connection connect;
 		LogIn newLogIn;
 		newLogIn=(LogIn)session.getAttribute("LogIn");
-		connect=newLogIn.connectionString();
-		Statement statement=connect.createStatement();
-		ResultSet set=statement.executeQuery("SELECT * FROM Product_Categories WHERE category_id <>"+categoryId);
-		return set;
+		try {
+			connect=newLogIn.connectionString();
+		
+			Statement statement=connect.createStatement();
+			ResultSet set=statement.executeQuery("SELECT * FROM Product_Categories WHERE category_id <>"+categoryId);
+			return set;
+		} catch (ClassNotFoundException | SQLException exception) {
+			
+			return null;
+		}
 	}
 
 }

@@ -19,6 +19,8 @@ import javax.servlet.http.HttpSession;
 
 /**
  * Servlet implementation class LogIn
+ * 
+ * Used for LogIn verification purposes
  */
 @WebServlet("/LogIn")
 public class LogIn extends HttpServlet {
@@ -91,25 +93,22 @@ public class LogIn extends HttpServlet {
 				response.sendRedirect("Home.jsp");
 			}
 			else{
-				response.sendRedirect("LoginFailed.jsp");
+				response.sendRedirect("LoginError.jsp");
 			}
-		} catch(ClassNotFoundException exception){
+		} catch(ClassNotFoundException | SQLException exception){
 			//out.println("Error occured in connecting to the database. "+exception.getMessage());
-			//response.sendRedirect("Error.jsp");
+			response.sendRedirect("Error.jsp");
 			exception.printStackTrace();
 		}
-		catch(SQLException sql){
+		
 			
-			//response.sendRedirect("Error.jsp");
-			sql.printStackTrace();
-		}
 		finally{
 			try {
 				connection.close();
 			} catch (SQLException sqlException) {
 				sqlException.printStackTrace();
 				//out.println("Error occured in connecting to the database. "+sqlException.getMessage());
-			//	response.sendRedirect("Error.jsp");
+				//response.sendRedirect("Error.jsp");
 			}
 			catch(NullPointerException nullPointer){
 				//out.println("Error occured in connecting to the database. "+nullPointer.getMessage());
@@ -118,6 +117,11 @@ public class LogIn extends HttpServlet {
 		}
 		
 	}
+	/*
+	 * method: public Connection connectionString()throws ClassNotFoundException,SQLException
+	 * Used for establishing the connection with the database 
+	 * 
+	 */
 	public Connection connectionString()throws ClassNotFoundException,SQLException{
 		
 		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
@@ -128,13 +132,22 @@ public class LogIn extends HttpServlet {
         return connection;
 		
 	}
-	public ResultSet catalogue()throws ClassNotFoundException,SQLException{
+	/*
+	 * method:public ResultSet catalogue()
+	 * Used for displaying the various categories of products
+	 */
+	public ResultSet catalogue(){
 		
 		Connection connect;
-		connect=this.connectionString();
-		Statement statement=connect.createStatement();
-		ResultSet set=statement.executeQuery("Select category_id, category_name from Product_Categories");
-		return set;
+		try {
+			connect=this.connectionString();
+		
+			Statement statement=connect.createStatement();
+			ResultSet set=statement.executeQuery("Select category_id, category_name from Product_Categories");
+			return set;
+		} catch (ClassNotFoundException | SQLException exception) {
+			return null;
+		}
 		
     }
 }

@@ -30,5 +30,6 @@ Categories&nbsp;&nbsp;
 %>
 <input type="Submit" value="Show Products">
 </form>
+<br><br><a href="ViewCart.jsp">View Cart</a>
 </body>
 </html>

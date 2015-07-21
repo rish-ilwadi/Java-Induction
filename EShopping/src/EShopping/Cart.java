@@ -20,6 +20,8 @@ import javax.servlet.http.HttpSession;
 
 /**
  * Servlet implementation class Cart
+ * 
+ * Used for performing various operations on Cart maintained as a LinkedHashMap
  */
 @WebServlet("/Cart")
 public class Cart extends HttpServlet {
@@ -49,30 +51,75 @@ public class Cart extends HttpServlet {
 		session=request.getSession();
 		long productId;
 		int quantity;
+		int totalQuantity=0;
 		productId=Long.parseLong(request.getParameter("products"));
 		quantity=Integer.parseInt(request.getParameter("quantity"));
-		Cart cart;
-		cart=new Cart();
-		Map map=cart.addToCart(productId, quantity, session);
+		LogIn newLogIn;
+		
+		newLogIn=(LogIn)session.getAttribute("LogIn");
+		Connection connect;
+		ResultSet set;
 		try {
-			cart.updateInventory(session,response);
+			connect=newLogIn.connectionString();
+		
+			Statement statement=connect.createStatement();
+			set=statement.executeQuery("SELECT quantity FROM Product_Details WHERE product_id="+productId);
+			while(set.next()){
+		
+				totalQuantity=set.getInt(1);
+			}
+		
+			Cart cart;
+			cart=new Cart();
+
+			if(quantity > 0 && quantity <= totalQuantity){
+			
+				Map map=cart.addToCart(productId, quantity, session);
+				cart.updateInventory(session);
+				response.sendRedirect("ViewCart.jsp");
+			
+			}else{
+			
+				response.sendRedirect("Home.jsp");
+			}	
 		} catch (ClassNotFoundException | SQLException e) {
 			
-			e.printStackTrace();
-		}
-	    
+			response.sendRedirect("Error.jsp");
+		}	    
 	}
+	/*
+	 * method: public Map addToCart(long productId,int quantity,HttpSession session)
+	 * 
+	 * Used for adding the product & its quantity to the cart maintained as a HashMap
+	 */
 	public Map addToCart(long productId,int quantity,HttpSession session){
 		Map map;
+		long mapProductId=0;
+		int previousQuantity=0;
 		map=(Map)session.getAttribute("Cart");
+		Iterator iterator=map.entrySet().iterator();
+		while(iterator.hasNext()){
+			Map.Entry entry=(Entry) iterator.next();
+			mapProductId=(long)entry.getKey();
+			previousQuantity=(int)entry.getValue();
+			if(mapProductId==productId){
+				quantity=previousQuantity+quantity;
+				
+			}
+		}
 		map.put(productId,quantity);
 		session.setAttribute("Cart",map);
 		return map;
 	}
-	public void viewCart(HttpSession session,PrintWriter out)throws ClassNotFoundException, SQLException{
+	/*
+	 * method: public void viewCart(HttpSession session, PrintWriter out)throws ClassNotFoundException, SQLException
+	 * 
+	 * Used for displaying the conetents of the cart & calculating the total price
+	 * 
+	 */
+	public void viewCart(HttpSession session, PrintWriter out)throws ClassNotFoundException, SQLException{
 		Map map;
 		ResultSet set;
-		
 		map=(Map)session.getAttribute("Cart");
 		LogIn newLogIn;
 		newLogIn=(LogIn)session.getAttribute("LogIn");
@@ -99,40 +146,46 @@ public class Cart extends HttpServlet {
 		out.println("<br><tr>Total Price=</tr>"+totalPrice);
 		
 	}
-	public void updateInventory(HttpSession session,HttpServletResponse response)throws ClassNotFoundException, SQLException{
+	/*
+	 * method: public void updateInventory(HttpSession session)
+	 * 
+	 * Used for updating the inventory as the person has put various items into his cart
+	 */
+	public void updateInventory(HttpSession session){
 		
 		ResultSet set;
 		LogIn newLogIn;
 		newLogIn=(LogIn)session.getAttribute("LogIn");
 		Connection connect;
-		connect=newLogIn.connectionString();
-		Map map=(Map)session.getAttribute("Cart");
-		long productId;
-		int quantity;
-		int totalQuantity=0;
-		Iterator iterator=map.entrySet().iterator();
-		while(iterator.hasNext()){
-			Map.Entry entry=(Entry) iterator.next();
-			productId=(long)entry.getKey();
-			quantity=(int)entry.getValue();
-			Statement statement=connect.createStatement();
-			set=statement.executeQuery("SELECT quantity FROM Product_Details WHERE product_id="+productId);
-			while(set.next()){
+		try {
+			connect=newLogIn.connectionString();
+		
+			Map map=(Map)session.getAttribute("Cart");
+			long productId;
+			int quantity;
+			int totalQuantity=0;
+			Iterator iterator=map.entrySet().iterator();
+			while(iterator.hasNext()){
+				Map.Entry entry=(Entry) iterator.next();
+				productId=(long)entry.getKey();
+				quantity=(int)entry.getValue();
+				Statement statement=connect.createStatement();
+				set=statement.executeQuery("SELECT quantity FROM Product_Details WHERE product_id="+productId);
+				while(set.next()){
 			
-				totalQuantity=set.getInt(1);
-			}
-			if(quantity<totalQuantity){
+					totalQuantity=set.getInt(1);
 			
-				try {
-					response.sendRedirect("ViewCart.jsp");
-				} catch (IOException exception) {
-					// TODO Auto-generated catch block
-					exception.printStackTrace();
-				}
+					if(quantity <= totalQuantity && totalQuantity > 0){
 				
+						totalQuantity=totalQuantity-quantity;
+					}	
+			
+				
+				}
+				statement.executeUpdate("UPDATE Product_Details SET quantity="+totalQuantity+" WHERE product_id="+productId);
 			}
-			
-			
+		} catch (ClassNotFoundException | SQLException exception) {
+				
 		}
 		
 	}

@@ -16,6 +16,8 @@ import javax.servlet.http.HttpSession;
 
 /**
  * Servlet implementation class SignUp
+ * 
+ * Used for registering a person's records into the database
  */
 @WebServlet("/SignUp")
 public class SignUp extends HttpServlet {
@@ -58,8 +60,10 @@ public class SignUp extends HttpServlet {
 		password=request.getParameter("pass");
 		HttpSession session;
 		Connection connection = null;
+		LogIn newLogIn;
+		newLogIn=new LogIn();
 		try{
-			connection=LogIn.connectionString();
+			connection=newLogIn.connectionString();
 			PreparedStatement statement=connection.prepareStatement("INSERT INTO User_Details(Name,email,password,Address,Mobile,Gender)VALUES(?,?,?,?,?,?)");
 			statement.setString(1,name);
 			statement.setString(2,email);
@@ -69,9 +73,7 @@ public class SignUp extends HttpServlet {
 			statement.setString(6,gender);
 			statement.executeUpdate();
 			
-			session=request.getSession();
-			session.setAttribute("email",email);
-			response.sendRedirect("Home.jsp");
+			response.sendRedirect("Register.jsp");
 			
 		
 		} catch(ClassNotFoundException exception){

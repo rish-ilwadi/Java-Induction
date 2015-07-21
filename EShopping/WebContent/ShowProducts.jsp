@@ -60,6 +60,6 @@ Other Categories&nbsp;&nbsp;
 %>
 <input type="Submit" value="Show Products">
 </form>
-<a href="Home.jsp">Back</a>   
+<a href="Home.jsp">Back</a>&nbsp;&nbsp;<a href="ViewCart.jsp">View Cart</a> 
 </body>
 </html>

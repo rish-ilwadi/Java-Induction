@@ -7,6 +7,9 @@
 <title>Insert title here</title>
 </head>
 <body>
-Error
+<h1>E Shopping</h1>
+<p>An Error Occured!! Go back to Home page</p>
+<a href="Home.jsp">Home</a>
+
 </body>
 </html>
