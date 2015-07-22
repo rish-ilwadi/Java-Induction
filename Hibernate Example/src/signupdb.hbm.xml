@@ -12,4 +12,30 @@
  <property name="email"></property>
  <property name="password"></property>
  </class>
+ 
+ <class name="hibernate.ProductCategories" table="Product_Categories">
+ <id name="categoryId">
+ <generator class="identity">
+ </generator>
+ </id>
+ <property name="categoryName"></property>
+<set name="category">
+        <key column="categoryId" 
+            not-null="true"/>
+        <one-to-many class="hibernate.ProductDetails"/>
+    </set>
+ </class>
+ <class name="hibernate.ProductDetails" table="Product_Details">
+ 
+ <id name="productId">
+ <generator class="identity">
+ </generator>
+ </id>
+ <property name="productName"></property>
+ <property name="price"></property>
+ <property name="quantity"></property>
+
+ </class>
+ 
+ 
  </hibernate-mapping>

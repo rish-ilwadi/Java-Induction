@@ -29,7 +29,7 @@ public class UserDAO {
 		
 			transaction=session.beginTransaction();
 		
-			SignUpDB client=new SignUpDB();
+			UserDetails client=new UserDetails();
 			client.setName(name);
 			client.setEmail(email);
 			client.setPassword(password);
@@ -64,7 +64,7 @@ public class UserDAO {
 			session=factory.openSession();
 		
 			transaction=session.beginTransaction();
-			Query logInQuery= session.createQuery("from SignUpDB where email=:email AND password=:password");
+			Query logInQuery= session.createQuery("from UserDetails where email=:email AND password=:password");
 			logInQuery.setParameter("email", email);
 			logInQuery.setParameter("password", password);
 			List list;
