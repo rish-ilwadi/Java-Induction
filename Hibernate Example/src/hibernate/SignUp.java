@@ -2,6 +2,7 @@ package hibernate;
 
 import java.io.IOException;
 
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -44,30 +45,20 @@ public class SignUp extends HttpServlet {
 		String name;
 		String email;
 		String password;
+		int check;
 		name=request.getParameter("Name");
 		email=request.getParameter("email");
-		password=request.getParameter("Password");
+		password=request.getParameter("pass");
+		UserDAO user=new UserDAO();
+		check=user.addUser(name, email, password);
+		if(check>0){
+			
+			response.sendRedirect("Home.jsp");
+		}
+		else{
+			response.sendRedirect("Error.jsp");
+		}
 		
-		Configuration config=new Configuration();
-		config.configure("hibernate.cfg.xml");
-		
-		SessionFactory factory=config.buildSessionFactory();
-		
-		Session session=factory.openSession();
-		
-		Transaction transaction=session.beginTransaction();
-		
-		SignUpDB client=new SignUpDB();
-		client.setName(name);
-		client.setEmail(email);
-		client.setPassword(password);
-		
-		session.persist(client);
-		transaction.commit();
-		
-		session.close();
-		
-		System.out.println("Done");
 	}
 
 }

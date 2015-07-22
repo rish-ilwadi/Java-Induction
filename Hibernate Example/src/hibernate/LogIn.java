@@ -33,7 +33,22 @@ public class LogIn extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		
+		
+		String email;
+		String password;
+		email=request.getParameter("email");
+		password=request.getParameter("password");
+		int check;
+		UserDAO checkUser=new UserDAO();
+		check=checkUser.checkLogIn(email,password);
+		if(check>0){
+			response.sendRedirect("Home.jsp");
+		}
+		else{
+			response.sendRedirect("Error.jsp");
+		}
+		
 	}
 
 }
