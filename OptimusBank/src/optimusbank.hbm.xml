@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+ <hibernate-mapping>
+ <class name="OptimusBank.Customer" table="Customer">
+ <id name="customerId">
+ <generator class="identity">
+ </generator>
+ </id>
+ <property name="customerName"></property>
+ <property name="email"></property>
+ <property name="password"></property>
+ <property name="telephoneNo"></property>
+ <property name="address"></property>
+ <property name="city"></property>
+ <property name="state"></property>
+ <property name="pin"></property>
+ <property name="fax"></property>
+ <property name="dateOfBirth"></property>
+ <property name="gender"></property>
+ 
+ <set name="account">
+        <key column="customerId" 
+            not-null="true"/>
+        <one-to-many class="hibernate.Account"/>
+    </set>
+    
+  <set name="account">
+        <key column="customerId" 
+            not-null="true"/>
+        <one-to-many class="hibernate.Account"/>
+    </set>
+ </class>
+ 
+ <class name="OptimusBank.Account" table="Account">
+ 
+ <id name="accountNo">
+ <generator class="identity">
+ </generator>
+ </id>
+ <property name="typeOfAccount"></property>
+ <property name="balance"></property>
+
+</class>
+ 
+ </hibernate-mapping>
