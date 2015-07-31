@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding = "UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+        
+<hibernate-mapping>
+	<class table = "EmployeeRecords" name = "optimus.v1.employeerecords.Employee">
+		<id name = "employeeCode">
+		<generator class = "identity"> </generator>
+		</id>
+		<property name = "name" />
+		<property name = "email" />
+		<property name = "mobileNo" type="long" />
+		<property name = "salary" type="long" />
+		<property name = "address" />
+	</class>
+	
+	<class table = "admin" name = "optimus.v1.employeerecords.Admin">
+		<id name = "adminId">
+		<generator class = "identity"> </generator>
+		</id>
+		<property name = "userName" />
+		<property name = "password" />
+	</class>
+</hibernate-mapping>
