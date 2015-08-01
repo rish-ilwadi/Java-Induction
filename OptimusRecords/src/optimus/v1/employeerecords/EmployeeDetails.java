@@ -9,28 +9,26 @@ import javax.ws.rs.Produces;
 
 import javax.ws.rs.QueryParam;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 @Path("/employeedetails")
 public class EmployeeDetails {
 
-	@GET
+	@POST
 	@Path("/getemployeedetails")
 	@Produces("application/json")
 	/*
-	 * method: public String getEmployeeDetails(String employeeName, String email)
-	 * Used for getting employee details based upon the employee Name & email 
+	 * method: public String getEmployeeDetails(String employee)
+	 * Used for getting employee details based upon the employee Name & email sent in JSON format 
 	 * Returns a String in JSON format containing employee's Details
 	 * Takes Request using GET method
 	 */
-	public String getEmployeeDetails(@QueryParam("employeeName") String employeeName, @QueryParam("email") String email){
+	public String getEmployeeDetails(String employee){
 	
-		JSONObject employee = new JSONObject();
-		employee.put("employeeName", employeeName);
-		employee.put("email", email);
 		
 		EmployeeDAO getEmployee = new EmployeeDAO();
-		String employeeDetails = getEmployee.getEmployeeDetails(employee.toString());
+		String employeeDetails = getEmployee.getEmployeeDetails(employee);
 		return employeeDetails;
 	}
 	@POST
@@ -38,24 +36,25 @@ public class EmployeeDetails {
 	@Consumes("application/json")
 	@Produces("application/json")
 	/*
-	 * method: public String addEmployeeDetails(String employeeRecords, String loginCredentials)
-	 * Takes two Strings in JSON format employeeRecords & loginCredentials
+	 * method: public String addEmployeeDetails(String employee)
+	 * Takes a String in JSONArray format containing loginCredentials & employeeDetails
 	 * Requires admin login for access
 	 * Used for adding a new employee
 	 * Returns a String containing employeeCode of new Employee in JSON format
 	 * else returns -1. If Authentication failed or employee not added
 	 */
-	public String addEmployeeDetails(String employeeRecords, String loginCredentials){
+	public String addEmployeeDetails(String employee ){
 		
 		int check;
-		check = new AdminDAO().checkAdmin(loginCredentials);
-		JSONObject out=new JSONObject();
+		JSONArray json = new JSONArray(employee);
+		check = new AdminDAO().checkAdmin(json.getJSONObject(0).toString());
+		JSONObject out = new JSONObject();
 		if(check == 1){
 			int employeeCode;
-			employeeCode = new EmployeeDAO().addEmployee(employeeRecords);
+			employeeCode = new EmployeeDAO().addEmployee(json.getJSONObject(1).toString());
 			out.put("Result", employeeCode);
 		}else{
-			out.put("Result", -1);
+			out.put("Result", check);
 		} 
 		return out.toString();
 	}
@@ -64,25 +63,25 @@ public class EmployeeDetails {
 	@Consumes("application/json")
 	@Produces("application/json")
 	/*
-	 * method: public String updateEmployeeDetails(String employeeRecords, String loginCredentials)
-	 * Takes two Strings in JSON format employeeRecords & loginCredentials
+	 * method: public String updateEmployeeDetails(String employee)
+	 * Takes a String in JSONArray format containing loginCredentials & employeeDetails
 	 * Requires admin login for access
 	 * Used for updating the employee records
 	 * Returns a String containing message in JSON format 
 	 * else returns -1. If Authentication failed or employee not updated
 	 */
-	public String updateEmployeeDetails(String employeeRecords, String loginCredentials){
+	public String updateEmployeeDetails(String employee){
 		
 		int check;
-		check = new AdminDAO().checkAdmin(loginCredentials);
+		JSONArray json = new JSONArray(employee);
+		check = new AdminDAO().checkAdmin(json.getJSONObject(0).toString());
 		JSONObject out=new JSONObject();
 		if(check == 1){
 			String message;
-			message = new EmployeeDAO().updateEmployee(employeeRecords);
-			out.put("Result", message);
-		}else{
-			out.put("Result", "Admin Authentication Failed");
-		} 
+			message = new EmployeeDAO().updateEmployee(json.getJSONObject(1).toString());
+			
+		}
+		out.put("Result", check);
 		return out.toString();
 	}
 }

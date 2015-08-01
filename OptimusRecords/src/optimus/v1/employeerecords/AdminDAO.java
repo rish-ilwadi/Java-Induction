@@ -9,7 +9,10 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.json.JSONObject;
-
+/*
+ * public class AdminDAO
+ * Used for performing various data access on Admin POJO & admin table
+ */
 public class AdminDAO {
 
 	private Configuration config;
@@ -17,18 +20,23 @@ public class AdminDAO {
 	private Session newSession;
 	private Transaction newTransaction;
 	private JSONObject admin;
+	/*
+	 * method: public int checkAdmin(String loginCredentials)
+	 * Takes loginCredentials as String in JSON format
+	 * Used for checking whether the following login credentials are of a valid admin
+	 */
 	public int checkAdmin(String loginCredentials){
 		
 		admin = new JSONObject(loginCredentials);
-		int check=0;
+		int check=-1;
 		try{
 			config = new Configuration();
 			factory = config.configure().buildSessionFactory();
 			newSession = factory.openSession();
 			newTransaction = newSession.beginTransaction();
 			Query getQuery = newSession.createQuery("FROM Admin WHERE userName=:userName AND password=:password ");
-			getQuery.setParameter("name", admin.getString("userName"));
-			getQuery.setParameter("email", admin.getString("password"));
+			getQuery.setParameter("userName", admin.getString("userName"));
+			getQuery.setParameter("password", admin.getString("password"));
 			List <Admin> list;
 			list = getQuery.list();
 			Iterator <Admin> iterator = list.iterator();
@@ -42,8 +50,9 @@ public class AdminDAO {
 			exception.printStackTrace();
 		}finally{
 			newSession.close();
-			return check;
+			
 		}
+		return check;
 	
 	}
 	
