@@ -9,6 +9,8 @@ import javax.ws.rs.Produces;
 
 import javax.ws.rs.QueryParam;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -26,9 +28,11 @@ public class EmployeeDetails {
 	 */
 	public String getEmployeeDetails(String employee){
 	
-		
+		Logger log = Logger.getLogger(EmployeeDetails.class);
+		PropertyConfigurator.configure(this.getClass().getClassLoader().getResource("log4j.properties"));
 		EmployeeDAO getEmployee = new EmployeeDAO();
 		String employeeDetails = getEmployee.getEmployeeDetails(employee);
+		log.info("Returning employee details to the client");
 		return employeeDetails;
 	}
 	@POST
@@ -46,15 +50,20 @@ public class EmployeeDetails {
 	public String addEmployeeDetails(String employee ){
 		
 		int check;
+		Logger log = Logger.getLogger(EmployeeDetails.class);
+		PropertyConfigurator.configure(this.getClass().getClassLoader().getResource("log4j.properties"));
 		JSONArray json = new JSONArray(employee);
 		check = new AdminDAO().checkAdmin(json.getJSONObject(0).toString());
 		JSONObject out = new JSONObject();
 		if(check == 1){
 			int employeeCode;
+			log.info("Admin verified");
 			employeeCode = new EmployeeDAO().addEmployee(json.getJSONObject(1).toString());
 			out.put("Result", employeeCode);
+			log.info("employee added");
 		}else{
 			out.put("Result", check);
+			log.info("Unable to add employee. Admin verification failed");
 		} 
 		return out.toString();
 	}
@@ -72,14 +81,21 @@ public class EmployeeDetails {
 	 */
 	public String updateEmployeeDetails(String employee){
 		
+		Logger log = Logger.getLogger(EmployeeDetails.class);
+		PropertyConfigurator.configure(this.getClass().getClassLoader().getResource("log4j.properties"));
 		int check;
 		JSONArray json = new JSONArray(employee);
 		check = new AdminDAO().checkAdmin(json.getJSONObject(0).toString());
 		JSONObject out=new JSONObject();
 		if(check == 1){
+			log.info("Admin verified");
 			String message;
 			message = new EmployeeDAO().updateEmployee(json.getJSONObject(1).toString());
+			log.info("Employee successfully updated");
 			
+		}
+		else{
+			log.info("Unable to update employee. Admin verification failed");
 		}
 		out.put("Result", check);
 		return out.toString();
