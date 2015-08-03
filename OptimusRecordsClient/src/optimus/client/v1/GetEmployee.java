@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.json.JSONObject;
 /*
  * public class GetEmployee
@@ -31,10 +33,15 @@ public class GetEmployee extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+		
+		Logger log = Logger.getLogger(GetEmployee.class);
+		PropertyConfigurator.configure(this.getClass().getClassLoader().getResource("log4j.properties"));
+		
 		/*
-		 * Creting JSOn object for the employee whose details are to be fetched
+		 * Creting JSON object for the employee whose details are to be fetched
 		 */
-	
+		log.debug("Started the doGet method of GetEmployee");
+		log.info("Fetchinhg name & email of employee whose details are to be fetched & converting to JSON Object");
 		JSONObject employee = new JSONObject();
 
 		employee.put("employeeName",request.getParameter("employeeName"));
@@ -44,8 +51,11 @@ public class GetEmployee extends HttpServlet {
 	     * Establishing connection with the REST Web service
 	     * using HttpURLConnection
 	     */
+		log.info("Establishing HttpURLConnection with the Web service");
 		URL url = new URL("http://localhost:8080/OptimusRecords/optimus/v1/employeerecords/employeedetails/getemployeedetails");
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+		log.info("Connection established");
+		log.info("Sending JSONObject to web service");
 		/*
 		 * Setting HTTP Headers
 		 */
@@ -55,7 +65,7 @@ public class GetEmployee extends HttpServlet {
 	    DataOutputStream out = new DataOutputStream(connection.getOutputStream());
 		out.writeBytes(employee.toString());
 		out.flush();
-		
+		log.info("Reading response");
 		//Reading Response using InputStreamReader
 
 		BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -65,6 +75,7 @@ public class GetEmployee extends HttpServlet {
 		while ((inputLine = in.readLine()) != null) {
 			employeeDetails.append(inputLine);   //Reading response
 		}
+		log.info("Employee details fetched");
 		String records = employeeDetails.toString();
 		HttpSession session = request.getSession();
 		session.setAttribute("records",records);
