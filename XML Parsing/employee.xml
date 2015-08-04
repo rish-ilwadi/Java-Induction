@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<optimus>
+   <employee id="591">
+      <firstname>Shivansh</firstname>
+      <lastname>Shrivastava</lastname>
+      <nickname>Two-Face</nickname>
+      <salary>24000</salary>
+   </employee>
+   <employee id="592">
+      <firstname>Rishab</firstname>
+      <lastname>Ilwadi</lastname>
+      <nickname>maestro</nickname>
+      <salary>25000</salary>
+   </employee>
+   <employee id="593">
+      <firstname>Aditya</firstname>
+      <lastname>Trivedi</lastname>
+      <nickname>dev4d</nickname>
+      <salary>20000</salary>
+   </employee>
+</optimus>
